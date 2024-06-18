@@ -1,0 +1,83 @@
+.data
+
+newline : .asciiz "\n"
+
+
+.text
+.globl MAIN
+
+MAIN: 
+
+li $t1, 1
+li $s1, 1
+li $t3, 2
+jal FIBONACCI 
+
+li $v0, 10
+syscall
+
+FIBONACCI: 
+
+move $t2, $s1
+add $s1, $s1, $t1
+move $t1, $t2
+addi $t3, $t3, 1
+bne $t3, 30, FIBONACCI
+move $a0, $s1
+li $v0, 1
+syscall
+li $v0, 4
+la $a0, newline
+syscall
+move $a0, $s1
+move $s1, $a0
+move $s3, $s1
+j TERMO40
+
+
+TERMO40: 
+move $t2, $s3
+add $s3, $s3, $t1
+move $t1, $t2
+addi $t3, $t3, 1
+bne $t3, 40, TERMO40
+move $a0, $s3
+li $v0, 1
+syscall
+li $v0, 4
+la $a0, newline
+syscall
+move $a0, $s3
+move $s2, $a0
+j TERMO41
+
+
+TERMO41: 
+
+move $t2, $s2
+add $s2, $s2, $t1
+move $t1, $t2
+addi $t3, $t3, 1
+move $a0, $s2
+li $v0, 1
+syscall
+li $v0, 4
+la $a0, newline
+syscall
+j RAZAO
+
+RAZAO: 
+mtc1 $s2, $f2
+cvt.s.w $f2, $f2
+mtc1 $s3, $f4
+cvt.s.w $f4, $f4
+div.s $f12, $f2, $f4
+
+
+li $v0, 2
+syscall
+mov.s $f0, $f12
+
+
+jr $ra
+
